@@ -1,4 +1,3 @@
-#include <bits/stdc++.h>
 #define lld long long int
 #define llf long double
 #define pb push_back
@@ -44,303 +43,93 @@
 #define up(a, n, x) upper_bound(a, a + n, x) - a;
 #define bug(a) std::cout << #a " -> " << (a) << "\t"
 
-//_______________________________________________
-#define on(m, p) (m | (1LL << p))
-#define off(m, p) (~(~m | (1LL << p)))
-#define ison(m, p) ((bool)(m & (1LL << p)))
-#define flip(m, p) (m ^ (1LL << p))
-#define nbitON(p) ((1LL << p) - 1)
-//__________Fenwick Tree__________________________
-#define rmvLastBit(n) n = n - (n & -n)
-#define child_node(n) n = n - (n & -n)
-#define par_node(n) n = n + (n & -n)
-//_______________________________________________
-using namespace std;
-
-/*
-fstream fin;
-    fin.open ("mytext.txt");
-
-map< , > :: iterator it
-
-
-*/
-lld fx[] = {1, 0, -1, 0, 1, 1, -1, -1};
-lld fy[] = {0, 1, 0, -1, 1, -1, 1, -1};
-//_______________________________________________
-
-lld const sz = 2e5 + 10;
-lld a[sz];
-lld n;
-vii ad[sz];
-
-vii ad2[sz];
-
-vii rad[sz];
-vii topo;
-bool vis[sz];
-
-lld z[sz];
-
-lld sum[sz];
-lld cnt[sz];
-
-lld mxpath;
-
-void dfs(lld u)
+class Trie
 {
-    vis[u] = 0;
-    for (lld v : ad[u])
+
+public:
+    bool find;
+    Trie *nxt[26];
+
+    Trie()
     {
-        if (vis[v])
+
+        find = 0;
+
+        loopN(26)
         {
-            dfs(v);
-        }
-    }
-    topo.pb(u);
-}
-
-vector<vii> compo;
-vii cur;
-
-lld add;
-
-void dfs2(lld u, lld clr)
-{
-    vis[u] = 0;
-    cur.pb(u);
-    z[u] = clr;
-    add += a[u];
-
-    for (lld v : rad[u])
-    {
-        if (vis[v])
-        {
-            dfs2(v, clr);
-        }
-    }
-}
-
-void dfs3(lld u)
-{
-    vis[u] = 0;
-    for (lld v : ad2[u])
-    {
-        if (vis[v])
-        {
-            dfs3(v);
-        }
-    }
-    topo.pb(u);
-}
-
-
-lld dp[sz];
-lld fun(lld u)
-{
-    retdp(dp[u]);
-    lld ans=cnt[u];
-    for(lld v : ad2[u])
-    {
-        ans=max(ans,cnt[u]+fun(v));
-
-    }
-    return dp[u]=ans;
-
-}
-
-void print(vii p)
-{
-    for(lld u : p)
-    {
-        cout<<u<<",";
-    }
-    cout<<endl;
-}
-
-lld ans;
-
-
-lld dp2[sz];
-
-lld fun2(lld u, lld d)
-{
-    //bug(u);
-   // bug(d)<<endl;
-    retdp(dp2[u]);
-    
-    lld ans=INF;
-
-    if(d==mxpath)
-    {
-        return sum[u];
-    }
-
-
-    for(lld v : ad2[u])
-    {
-        ans=min(ans,sum[u]+fun2(v,d+cnt[v]));
-    }
-
-    if(ans!=INF)
-    {
-        dp[u]=ans;
-    }
-    return ans;
-
-}
-
-
-
-
-
-
-void slv()
-{
-    lld m;
-    cin >> n >> m;
-    loopN(n) cin >> a[i];
-    lld x, y;
-
-    loopN(n) ad[i].clear();
-    loopN(n) rad[i].clear();
-
-    loopN(m)
-    {
-        cin >> x >> y;
-        x--;
-        y--;
-        ad[x].pb(y);
-        rad[y].pb(x);
-    }
-    topo.clear();
-
-    loopN(n) vis[i] = 1;
-
-    loopN(n)
-    {
-        if (vis[i])
-        {
-            dfs(i);
-        }
-    }
-    reverse(all(topo));
-
-    loopN(n) vis[i] = 1;
-
-    lld clr = 0;
-    compo.clear();
-
-    //cout<<"____  compo ____\n";
-
-    for (lld u : topo)
-    {
-        if (vis[u])
-        {
-            cur.clear();
-            add = 0;
-
-            dfs2(u, clr);
-            compo.pb(cur);
-
-            sum[clr] = add;
-
-            cnt[clr] = cur.size();
-            
-            //print(cur);
-
-            clr++;
+            nxt[i] = nullptr;
         }
     }
 
-    loopN(clr) ad2[i].clear();
-
-    loopN(n)
+    void insert(string word)
     {
-        for (lld j : ad[i])
+
+        lld x;
+        Trie *cur = this;
+
+        for (auto a : word)
         {
-            if (z[i] != z[j])
+            x = a - 'a';
+            if (cur->nxt[x] != nullptr)
             {
-                ad2[z[i]].pb(z[j]);
-                //bug(z[i]);
-                //bug(z[j])<<endl;
+                cur = cur->nxt[x];
+            }
+            else
+            {
+                cur->nxt[x] = new Trie();
+                cur = cur->nxt[x];
             }
         }
+        cur->find = 1;
     }
 
-
-    topo.clear();
-
-    loopN(clr) vis[i] = 1;
-
-    loopN(clr)
+    bool search(string word)
     {
-        if (vis[i])
+
+        lld x;
+        Trie *cur = this;
+
+        for (auto a : word)
         {
-            dfs3(i);
+            x = a - 'a';
+            if (cur->nxt[x] != nullptr)
+            {
+                cur = cur->nxt[x];
+            }
+            else
+            {
+                return 0;
+            }
         }
+        return cur->find;
     }
-    reverse(all(topo));
 
-    mxpath=0;
-
-    loopN(clr)dp[i]= -1;
-    lld k;
-
-
-    
-    for (lld u : topo)
+    bool startsWith(string prefix)
     {
-        k=fun(u);
-        mxpath=max(mxpath,k);
-        //bug(u);
-       // bug(k)<<endl;
-        
-    }
-    //cout<<endl;
-    lld ans=INF;
 
-    loopN(clr)dp2[i]=-1;
+        lld x;
+        Trie *cur = this;
 
-    
-
-    for (lld u : topo)
-    {
-        if(mxpath==fun(u))
+        for (auto a : prefix)
         {
-            k=fun2(u,cnt[u]);
-            ans=min(ans,k);
-
-            //cout<<"___end___\n";
-
+            x = a - 'a';
+            if (cur->nxt[x] != nullptr)
+            {
+                cur = cur->nxt[x];
+            }
+            else
+            {
+                return 0;
+            }
         }
-
+        return 1;
     }
+};
 
-    cout<<mxpath<<" "<<ans<<endl;
-
-
-
-
-}
-
-int main()
-{
-    ISO;
-    lld idx = 1;
-    lld t;
-    cin >> t;
-    while (t--)
-    {
-        // case(idx++);
-        slv();
-    }
-    return 0;
-}
-
-/*
-
-
-
-
-*/
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */

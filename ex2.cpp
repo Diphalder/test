@@ -1,175 +1,102 @@
-#include <cstdio>
-#include <vector>
-#include <map>
-#include <cassert>
-#include <algorithm>
-#include <stdint.h>
+#include <bits/stdc++.h>
 #define lld long long int
+#define llf long double
+#define pb push_back
+#define pushf(v, a) v.insert(v.begin(), a)
+#define popf(v) v.erase(v.begin())
+#define popb pop_back
+#define mp make_pair
+#define in insert
+#define minheap priority_queue<lld, vector<lld>, greater<lld>>
+#define maxheap priority_queue<lld>
+#define loopN(n) for (lld i = 0; i < n; i++)
+#define loopN2(n) for (lld j = 0; j < n; j++)
+#define loop(p, n) for (lld i = p; i <= n; i++)
+#define rloop(p, n) for (lld i = n; i >= p; i--)
+#define loop2(p, n) for (lld j = p; j <= n; j++)
+#define looop(p, n, i) for (lld i = p; i <= n; i++)
+#define rlooop(p, n, i) for (lld i = n; i >= p; i--)
+#define iloop(it, m) for (it = m.begin(); it != m.end(); it++)
+#define all(v) v.begin(), v.end()
+#define ff first
+#define ss second
+#define INF 2e18
+#define FILE                          \
+    freopen("input.txt", "r", stdin); \
+    freopen("output.txt", "w", stdout)
+#define pi (2 * acos(0.0))
+#define mod (1e9 + 7)
+#define ISO                      \
+    ios::sync_with_stdio(false); \
+    cin.tie(0)
+#define mem(a, b) memset(a, b, sizeof(a))
+#define case(z) cout << "Case " << z << ": "
+#define setprec(a) fixed << setprecision(a)
+#define pii pair<lld, lld>
+#define vii vector<lld>
+#define retdp(a) \
+    if (a != -1) \
+    return a
+#define yes cout << "YES"
+#define no cout << "NO"
+#define nl cout << endl
+#define low(a, n, x) lower_bound(a, a + n, x) - a;
+#define up(a, n, x) upper_bound(a, a + n, x) - a;
+#define bug(a) std::cout << #a " -> " << (a) << "\t"
+
+//_______________________________________________
+#define on(m, p) (m | (1LL << p))
+#define off(m, p) (~(~m | (1LL << p)))
+#define ison(m, p) ((bool)(m & (1LL << p)))
+#define flip(m, p) (m ^ (1LL << p))
+#define nbitON(p) ((1LL << p) - 1)
+//__________Fenwick Tree__________________________
+#define rmvLastBit(n) n = n - (n & -n)
+#define child_node(n) n = n - (n & -n)
+#define par_node(n) n = n + (n & -n)
+//_______________________________________________
+using namespace std;
+
+/*
+fstream fin;
+    fin.open ("mytext.txt");
+
+map< , > :: iterator it
 
 
+*/
+lld fx[] = {1, 0, -1, 0, 1, 1, -1, -1};
+lld fy[] = {0, 1, 0, -1, 1, -1, 1, -1};
+//_______________________________________________
 
-std::map<lld, lld> par;
-std::vector<lld> box[16];
-long long box_sum[16];
-
-std::map<lld, std::vector<lld>> neededby;
-std::map<lld, lld> needs;
-
-std::map<lld, lld> vis;
-std::vector<lld> cycle;
-
-
-bool dfs(lld x)
+void slv()
 {
-    if (vis[x] == 2)
-        return false;
-    
-    if (vis[x] == 1)
+    lld n;
+    cin >> n;
+    cout<<n<<endl;
+    loopN(n - 1)
     {
-        cycle.erase(cycle.begin(), std::find(cycle.begin(), cycle.end(), x));
-        return true;
+        //cout << i + 1 << " " << i + 2 << " " << 1 << endl;
+        cout << i + 1 << " " << i + 2 << " " << rand()%1000000000+1 << endl;
     }
-    vis[x] = 1;
-    cycle.push_back(x);
-    for (lld y : neededby[x])
-    {
-        if (dfs(y))
-        {
-            vis[x] = 2;
-            return true;
-        }
-    }
-    cycle.pop_back();
-    vis[x] = 2;
-    return false;
-}
-
-
-std::map<lld, std::vector<lld>> single;
-
-bool dp[1 << 15];
-
-lld cs[16];
-lld ps[16];
-
-void recover(lld mask)
-{
-    if (single.count(mask))
-    {
-        std::vector<lld> cycle = single[mask];
-        for (lld y : cycle)
-        {
-            lld x = needs[y];
-            lld i = par[x];
-            cs[i] = x;
-            ps[i] = par[y];
-        }
-        return;
-    }
-    for (lld sub = (mask - 1) & mask; sub; sub = (sub - 1) & mask)
-    {
-        lld rest = mask & ~sub;
-        if (dp[sub] && dp[rest])
-        {
-            recover(sub);
-            recover(rest);
-            return;
-        }
-    }
-    assert(0);
+   
 }
 
 int main()
 {
-    lld K;
-    scanf("%lld", &K);
-    long long total_sum = 0;
-
-    for (lld i = 0; i < K; i++)
+    ISO;
+    lld idx = 1;
+    // lld t;cin>>t;while(t--)
     {
-        lld N;
-        scanf("%lld", &N);
-        for (lld j = 0; j < N; j++)
-        {
-            lld A;
-            scanf("%lld", &A);
-            box[i].push_back(A);
-            
-            box_sum[i] += A;
-            
-            total_sum += A;
-            
-            par[A] = i;
-        }
+        // case(idx++);
+        slv();
     }
-
-
-    long long target = total_sum / K;
-
-    for (auto it : par)
-    {
-        lld i = it.second;
-        lld x = it.first;
-        lld y = x + target - box_sum[i];
-        
-        if (par.count(y))
-        {
-            needs[x] = y;
-            neededby[y].push_back(x);
-        }
-    }
-    
-    for (lld i = 0; i < K; i++)
-    {
-        for (lld x : box[i])
-        {
-            if (dfs(x))
-            {
-                lld mask = 0;
-                bool bad = false;
-                for (lld v : cycle)
-                {
-                    if (mask & (1 << par[v]))
-                    {
-                        bad = true;
-                        break;
-                    }
-                    mask |= (1 << par[v]);
-                }
-                if (!bad)
-                {
-                    single[mask] = cycle;
-                }
-                cycle.clear();
-            }
-        }
-    }
-    
-    
-    for (lld mask = 0; mask < (1 << K); mask++)
-    {
-        if (single.count(mask))
-        {
-            dp[mask] = true;
-            continue;
-        }
-        for (lld sub = (mask - 1) & mask; sub; sub = (sub - 1) & mask)
-        {
-            lld rest = mask & ~sub;
-            dp[mask] |= dp[sub] & dp[rest];
-        }
-    }
-
-
-    if (!dp[(1 << K) - 1])
-    {
-        printf("No\n");
-        return 0;
-    }
-    recover((1 << K) - 1);
-    printf("Yes\n");
-    for (lld i = 0; i < K; i++)
-    {
-        printf("%lld %lld\n", cs[i], ps[i] + 1);
-    }
+    return 0;
 }
+
+/*
+
+
+
+
+*/

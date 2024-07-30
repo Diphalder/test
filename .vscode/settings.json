@@ -93,7 +93,9 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "xstring": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "xhash": "cpp",
+        "xtree": "cpp"
     },
     "editor.fontSize": 17
 }

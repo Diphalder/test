@@ -87,8 +87,6 @@ vii tmp;
 
 lld color[sz];
 
-lld compomx[sz];
-
 void dfstopo(lld u)
 {
     vis[u] = 0;
@@ -118,55 +116,10 @@ void dfscompo(lld u, lld idx)
     }
 }
 
-bool loopfound = 0;
-lld dfs(lld u, lld z)
-{
-
-    vis[u] = 0;
-    lld ans = 1;
-    for (auto v : ad[u])
-    {
-        if (vis[v] == 0)
-        {
-            loopfound = 1;
-        }
-        if (vis[v] && a[v] <= z)
-        {
-            ans = max(ans, 1 + dfs(v, z));
-        }
-    }
-    return ans;
-}
-
-lld dfsr(lld u, lld z)
-{
-
-    vis[u] = 0;
-    lld ans = 1;
-    for (auto v : adr[u])
-    {
-        if (vis[v] == 0)
-        {
-            loopfound = 1;
-        }
-        if (vis[v] && a[v] <= z)
-        {
-            ans = max(ans, 1 + dfsr(v, z));
-        }
-    }
-    return ans;
-}
-
 void slv()
 {
     cin >> n >> m >> k;
-    vector<pii> val;
-    loopN(n)
-    {
-        cin >> a[i];
-        val.pb({a[i], i});
-    }
-
+    loopN(n) cin >> a[i];
     lld x, y;
     loopN(m)
     {
@@ -211,72 +164,14 @@ void slv()
             }
         }
     }
-    loopN(compo.size())
-    {
-        if (compo[i].size() > 1)
-        {
-            lld mx = -INF;
-            for (lld u : compo[i])
-            {
-                mx = max(mx, a[u]);
-            }
-            compomx[i] = mx;
-        }
-        else
-        {
-            compomx[i] = a[compo[i][0]];
-        }
-    }
 
-    lld ans = INF;
-    loopN(compo.size())
-    {
-        if (compo[i].size() > 1)
-        {
-            ans = min(ans, compomx[i]);
-        }
-    }
+    
 
-    sort(all(val));
-    lld lw = 0, hi = n - 1, mid;
-    lld u, z;
-    lld front, back;
+   
 
-    while (lw <= hi)
-    {
 
-        mid = (hi + lw) / 2;
 
-        z = val[mid].ff;
-        u = val[mid].ss;
 
-        loopfound = 0;
-
-        mem(vis, 1);
-        front = dfs(u, z);
-        mem(vis, 1);
-        back = dfsr(u, z);
-
-        if (front + back > k || loopfound)
-        {
-
-            ans = min(ans, z);
-            hi = mid - 1;
-        }
-        else
-        {
-
-            lw = mid + 1;
-        }
-    }
-    if (ans == INF)
-    {
-        cout << -1 << endl;
-    }
-    else
-    {
-        cout << ans << endl;
-    }
 }
 /*
  for (auto c : compo)
